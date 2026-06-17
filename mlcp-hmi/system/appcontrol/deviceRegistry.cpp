@@ -13,6 +13,15 @@ constexpr int kFanStopDuty = 0;
 
 } // namespace
 
+void DeviceRegistry::startup(Runtime& runtime,
+                             TaskRegistry& taskRegistry,
+                             const LifecycleReporter& reporter)
+{
+    initializeFan(runtime, reporter);
+    initializeTemperatureSensor(runtime, taskRegistry, reporter);
+    initializeSystemInfoReader(runtime, taskRegistry, reporter);
+}
+
 void DeviceRegistry::initializeFan(Runtime& runtime, const LifecycleReporter& reporter)
 {
     try {
@@ -33,7 +42,7 @@ void DeviceRegistry::initializeFan(Runtime& runtime, const LifecycleReporter& re
 }
 
 void DeviceRegistry::initializeTemperatureSensor(Runtime& runtime,
-                                                 RuntimeTaskRegistry& taskRegistry,
+                                                 TaskRegistry& taskRegistry,
                                                  const LifecycleReporter& reporter)
 {
     try {
@@ -67,7 +76,7 @@ void DeviceRegistry::initializeTemperatureSensor(Runtime& runtime,
 }
 
 void DeviceRegistry::initializeSystemInfoReader(Runtime& runtime,
-                                                RuntimeTaskRegistry& taskRegistry,
+                                                TaskRegistry& taskRegistry,
                                                 const LifecycleReporter& reporter)
 {
     try {
