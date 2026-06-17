@@ -11,7 +11,7 @@ namespace mlcp::hmi::system {
 AppControl::AppControl()
     : lifecycle_(),
       runtime_(),
-      runtimeTasks_(runtime_),
+      taskRegistry_(runtime_),
       devices_(),
       wiring_(),
       selfTestFlow_([this](mlcp::hmi::service::LifecycleComponent component,
@@ -34,38 +34,21 @@ void AppControl::startup()
             mlcp::hmi::service::LifecycleComponent::runtime,
             mlcp::hmi::service::LifecycleComponentState::running);
     });
-    devices_.initializeFan(
-        runtime_,
+
+    const DeviceRegistry::LifecycleReporter lifecycleReporter =
         [this](mlcp::hmi::service::LifecycleComponent component,
                mlcp::hmi::service::LifecycleComponentState componentState) {
             reportLifecycleComponentState(component, componentState);
-        });
-    devices_.initializeTemperatureSensor(
-        runtime_,
-        runtimeTasks_,
-        [this](mlcp::hmi::service::LifecycleComponent component,
-               mlcp::hmi::service::LifecycleComponentState componentState) {
-            reportLifecycleComponentState(component, componentState);
-        });
-    wiring_.initializeServices(
-        devices_,
-        runtime_,
-        runtimeTasks_,
-        [this](mlcp::hmi::service::LifecycleComponent component,
-               mlcp::hmi::service::LifecycleComponentState componentState) {
-            reportLifecycleComponentState(component, componentState);
-        },
+        };
+    const DeviceRegistry::LifecycleReporter directLifecycleReporter =
         [this](mlcp::hmi::service::LifecycleComponent component,
                mlcp::hmi::service::LifecycleComponentState componentState) {
             reportLifecycleComponentStateDirect(component, componentState);
-        });
-    devices_.initializeSystemInfoReader(
-        runtime_,
-        runtimeTasks_,
-        [this](mlcp::hmi::service::LifecycleComponent component,
-               mlcp::hmi::service::LifecycleComponentState componentState) {
-            reportLifecycleComponentState(component, componentState);
-        });
+        };
+
+    devices_.startup(runtime_, taskRegistry_, lifecycleReporter);
+    wiring_.initializeServices(
+        devices_, runtime_, taskRegistry_, lifecycleReporter, directLifecycleReporter);
     wiring_.configureSelfTestChecks(selfTestFlow_, devices_, runtime_);
     executeSelfTest(mlcp::hmi::service::selftest::SelfTestReason::startup);
     runtime_.runServiceTaskAndWait([this]() {
@@ -79,7 +62,7 @@ void AppControl::shutdown()
 {
     LOG_I("appcontrol shutdown start");
     if (runtime_.isRunning()) {
-        runtimeTasks_.unregisterAll();
+        taskRegistry_.unregisterAll();
         runtime_.runServiceTaskAndWait([this]() {
             wiring_.stopServices();
         });
