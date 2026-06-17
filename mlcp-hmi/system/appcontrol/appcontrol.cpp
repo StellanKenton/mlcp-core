@@ -34,38 +34,21 @@ void AppControl::startup()
             mlcp::hmi::service::LifecycleComponent::runtime,
             mlcp::hmi::service::LifecycleComponentState::running);
     });
-    devices_.initializeFan(
-        runtime_,
+
+    const DeviceRegistry::LifecycleReporter lifecycleReporter =
         [this](mlcp::hmi::service::LifecycleComponent component,
                mlcp::hmi::service::LifecycleComponentState componentState) {
             reportLifecycleComponentState(component, componentState);
-        });
-    devices_.initializeTemperatureSensor(
-        runtime_,
-        runtimeTasks_,
-        [this](mlcp::hmi::service::LifecycleComponent component,
-               mlcp::hmi::service::LifecycleComponentState componentState) {
-            reportLifecycleComponentState(component, componentState);
-        });
-    wiring_.initializeServices(
-        devices_,
-        runtime_,
-        runtimeTasks_,
-        [this](mlcp::hmi::service::LifecycleComponent component,
-               mlcp::hmi::service::LifecycleComponentState componentState) {
-            reportLifecycleComponentState(component, componentState);
-        },
+        };
+    const DeviceRegistry::LifecycleReporter directLifecycleReporter =
         [this](mlcp::hmi::service::LifecycleComponent component,
                mlcp::hmi::service::LifecycleComponentState componentState) {
             reportLifecycleComponentStateDirect(component, componentState);
-        });
-    devices_.initializeSystemInfoReader(
-        runtime_,
-        runtimeTasks_,
-        [this](mlcp::hmi::service::LifecycleComponent component,
-               mlcp::hmi::service::LifecycleComponentState componentState) {
-            reportLifecycleComponentState(component, componentState);
-        });
+        };
+
+    devices_.startup(runtime_, runtimeTasks_, lifecycleReporter);
+    wiring_.initializeServices(
+        devices_, runtime_, runtimeTasks_, lifecycleReporter, directLifecycleReporter);
     wiring_.configureSelfTestChecks(selfTestFlow_, devices_, runtime_);
     executeSelfTest(mlcp::hmi::service::selftest::SelfTestReason::startup);
     runtime_.runServiceTaskAndWait([this]() {
