@@ -50,16 +50,16 @@ set(PROJECT_SOURCES
     persistence/storage/exampleServiceConfigStore.h
     persistence/storage/tempServiceConfigStore.cpp
     persistence/storage/tempServiceConfigStore.h
-    system/appcontrol/applicationServiceRegistry.cpp
-    system/appcontrol/applicationServiceRegistry.h
-    system/appcontrol/applicationWiring.cpp
-    system/appcontrol/applicationWiring.h
+    system/appcontrol/appWiring.cpp
+    system/appcontrol/appWiring.h
     system/appcontrol/appcontrol.cpp
     system/appcontrol/appcontrol.h
     system/appcontrol/deviceRegistry.cpp
     system/appcontrol/deviceRegistry.h
-    system/appcontrol/runtimeTaskRegistry.cpp
-    system/appcontrol/runtimeTaskRegistry.h
+    system/appcontrol/serviceRegistry.cpp
+    system/appcontrol/serviceRegistry.h
+    system/appcontrol/taskRegistry.cpp
+    system/appcontrol/taskRegistry.h
     service/lifecycle/lifecycle.cpp
     service/lifecycle/lifecycle.h
     service/example/exampleSampler.cpp
@@ -98,7 +98,7 @@ else()
         add_library(mlcp-hmi SHARED
             ${PROJECT_SOURCES}
         )
-# Define properties for Android with Qt 5 after find_package() calls as:
+# Define properties for Android with Qt 5 as:
 #    set(ANDROID_PACKAGE_SOURCE_DIR "${CMAKE_CURRENT_SOURCE_DIR}/android")
     else()
         add_executable(mlcp-hmi
