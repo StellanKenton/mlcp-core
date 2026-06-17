@@ -149,9 +149,9 @@ mlcp-hmi
 `system` 是 Linux 系统能力和运行环境目录。
 - `appcontrol`：应用启动、停止、重启、升级控制。`AppControl` 只保留启动、
   停止和对 `bridge` 暴露的应用接口；`DeviceRegistry` 负责发现并持有风扇、
-  温度、压力、液位等设备对象；`ApplicationWiring` 负责服务装配、服务宿主和
-  自检项注册；`ApplicationServiceRegistry` 汇总服务、服务自检项和服务声明的
-  runtime 任务；`RuntimeTaskRegistry` 负责集中注册和注销运行期周期任务。
+  温度、压力、液位等设备对象；`AppWiring` 负责服务装配、服务宿主和
+  自检项注册；`ServiceRegistry` 汇总服务、服务自检项和服务声明的
+  runtime 任务；`TaskRegistry` 负责集中注册和注销运行期周期任务。
 - `diagnostic`：系统诊断、硬件诊断、环境检查、故障收集。
 - `lifecycle`：进程生命周期、初始化阶段、运行阶段、退出阶段管理。
 - `power`：关机、重启、电源状态、电源保护策略。
