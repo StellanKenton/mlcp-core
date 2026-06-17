@@ -21,13 +21,9 @@ public:
         std::function<void(mlcp::hmi::service::LifecycleComponent,
                            mlcp::hmi::service::LifecycleComponentState)>;
 
-    void initializeFan(Runtime& runtime, const LifecycleReporter& reporter);
-    void initializeTemperatureSensor(Runtime& runtime,
-                                     RuntimeTaskRegistry& taskRegistry,
-                                     const LifecycleReporter& reporter);
-    void initializeSystemInfoReader(Runtime& runtime,
-                                    RuntimeTaskRegistry& taskRegistry,
-                                    const LifecycleReporter& reporter);
+    void startup(Runtime& runtime,
+                 RuntimeTaskRegistry& taskRegistry,
+                 const LifecycleReporter& reporter);
     void stopFan(Runtime& runtime);
     void clear();
 
@@ -37,6 +33,14 @@ public:
     mlcp::hmi::system::diagnostic::SystemInfoMonitor* systemInfoMonitor();
 
 private:
+    void initializeFan(Runtime& runtime, const LifecycleReporter& reporter);
+    void initializeTemperatureSensor(Runtime& runtime,
+                                     RuntimeTaskRegistry& taskRegistry,
+                                     const LifecycleReporter& reporter);
+    void initializeSystemInfoReader(Runtime& runtime,
+                                    RuntimeTaskRegistry& taskRegistry,
+                                    const LifecycleReporter& reporter);
+
     std::optional<mlcp::hmi::device::fan::FanController> fanController_;
     std::optional<mlcp::hmi::device::temp::TemperatureSensor> temperatureSensor_;
     std::optional<mlcp::hmi::service::temp::TemperatureSampler> temperatureSampler_;
