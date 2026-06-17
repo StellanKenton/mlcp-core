@@ -7,9 +7,9 @@
 #include "service/lifecycle/lifecycle.h"
 #include "service/selftest/selfTestFlow.h"
 #include "service/temp/tempService.h"
-#include "system/appcontrol/applicationWiring.h"
+#include "system/appcontrol/appWiring.h"
 #include "system/appcontrol/deviceRegistry.h"
-#include "system/appcontrol/runtimeTaskRegistry.h"
+#include "system/appcontrol/taskRegistry.h"
 #include "system/runtime/runtime.h"
 
 namespace mlcp::hmi::system {
@@ -40,9 +40,9 @@ private:
 
     mlcp::hmi::service::Lifecycle lifecycle_;
     Runtime runtime_;
-    RuntimeTaskRegistry runtimeTasks_;
+    TaskRegistry taskRegistry_;
     DeviceRegistry devices_;
-    ApplicationWiring wiring_;
+    AppWiring wiring_;
     mlcp::hmi::service::selftest::SelfTestFlow selfTestFlow_;
 
     std::atomic<bool> requestStop_ {false};
