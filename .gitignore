@@ -1,0 +1,45 @@
+# CMake build outputs
+build/
+cmake-build-*/
+CMakeFiles/
+CMakeCache.txt
+cmake_install.cmake
+Makefile
+compile_commands.json
+build-mlcp-hmi-Desktop-Debug/
+
+# Compiled objects and binaries
+*.o
+*.obj
+*.a
+*.so
+*.so.*
+*.dylib
+*.dll
+*.exe
+*.out
+*.elf
+*.bin
+*.map
+
+# Generated dependency files
+*.d
+
+# Runtime logs and local data
+logs/
+*.log
+*.pid
+*.tmp
+
+# Editor and OS local files
+.idea/
+.vscode/*
+!.vscode/settings.json
+!.vscode/tasks.json
+!.vscode/launch.json
+!.vscode/extensions.json
+*~
+*.swp
+*.swo
+.DS_Store
+Thumbs.db
